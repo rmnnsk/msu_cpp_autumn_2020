@@ -6,14 +6,14 @@ all: build
 build_parser: parser.cpp
 	$(CC) $(O_FLAGS) parser.cpp -o parser.o
 
-build_test: test.cpp
-	$(CC) $(O_FLAGS) test.cpp -o test.o
+build_test: tests.cpp
+	$(CC) $(O_FLAGS) tests.cpp -o tests.o
 
 build: build_parser build_test
-	$(CC) $(EX_FLAGS) parser.o test.o -o test
+	$(CC) $(EX_FLAGS) parser.o tests.o -o tests
 
 test: 
-	./test
+	./tests
 
 clean:
 	rm  *.o

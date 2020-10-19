@@ -42,13 +42,13 @@ void test3()
     std::cout << "TEST 3" << std::endl;
     std::cout << "Create parser and change STRING and NUMBER callbacks." << std::endl;
     TokenParser par{};
-    par.SetStringCallback([](std::string token) {
+    par.SetStringCallback([](std::string &token) {
         std::transform(token.begin(), token.end(), token.begin(),
                        [](unsigned char c) -> unsigned char { return std::tolower(c); });
         std::cout << "Found string + to_lower -> " << token << std::endl;
 
     });
-    par.SetNumberCallback([](std::string token) {
+    par.SetNumberCallback([](const std::string &token) {
         std::cout << "Found number " << token << " + mod 10 -> " << std::stoi(token) % 10 << std::endl;
     });
     std::string test_string = "WoooooooooW      2 BRAND NeW \n\
@@ -60,7 +60,7 @@ void test3()
 int main()
 {
     std::vector<std::function<void()>> tests = {test1, test2, test3};
-    for (const auto& test: tests) {
+    for (const auto &test: tests) {
         test();
         std::cout << std::endl;
     }
