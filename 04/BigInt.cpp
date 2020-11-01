@@ -1,4 +1,5 @@
 #include "BigInt.h"
+#include <iomanip>
 
 int num_len(int num)
 {
@@ -14,22 +15,27 @@ int num_len(int num)
 }
 
 
-BigInt::BigInt(const std::string& num) : size(num.size())
+BigInt::BigInt(const std::string& num)
 {
-
-    number = new int[size]{};
     std::string rem_sign = num;
-    if (size > 0 && num[0] == '-') {
-        size -= 1;
+    if (!rem_sign.empty() && num[0] == '-') {
         rem_sign.erase(0, 1);
         minus = true;
     }
-    for (int i = 0; i < size; i++) {
-        number[i] = rem_sign[size - i - 1] - '0';
+    int base_len = num_len(BASE) - 1;
+    size = (num.size() + base_len - 1) / base_len;
+    number = new int[size]{};
+    for (int i = (int) rem_sign.size(), free = 0; i > 0; i -= base_len, free++) {
+        if (i < base_len) {
+            number[free] = std::stoi(rem_sign.substr(0, i));
+        }
+        else {
+            number[free] = std::stoi(rem_sign.substr(i - 9, 9));
+        }
     }
 }
 
-BigInt::BigInt(const int& num) : size(num_len(std::abs(num)))
+BigInt::BigInt(int num) : size(num_len(std::abs(num)))
 {
     int tmp = num;
     if (tmp < 0) {
@@ -99,8 +105,10 @@ std::ostream& operator<<(std::ostream& os, const BigInt& big_num)
     if (big_num.minus) {
         os << '-';
     }
-    for (int i = sz - 1; i >= 0; i--) {
-        os << big_num.number[i];
+    int fill_len = num_len(big_num.BASE) - 1;
+    os << big_num.number[sz - 1];
+    for (int i = sz - 2; i >= 0; i--) {
+        os << std::setfill('0') << std::setw(fill_len) << big_num.number[i];
     }
     return os;
 }
@@ -116,7 +124,7 @@ BigInt BigInt::operator+(const BigInt& rhs) const
     }
 
     int* bigger = (size > rhs.size) ? number : rhs.number;
-    int bigger_size = (size > rhs.size) ? size : rhs.size;
+    size_t bigger_size = (size > rhs.size) ? size : rhs.size;
 
     BigInt res{};
     res.number = new int[bigger_size + 1]{};
@@ -192,18 +200,18 @@ BigInt BigInt::operator*(const BigInt& rhs) const
     res.size = size + rhs.size + 1;
     res.minus = minus ^ rhs.minus;
 
-    int carry = 0;
+    long long carry = 0;
     int i = 0;
     while (i < size) {
         int j = 0;
         while (j < rhs.size || carry) {
-            int cur;
+            long long cur;
             if (j < rhs.size) {
-                cur = res.number[i + j] + number[i] * rhs.number[j] + carry;
+                cur = res.number[i + j] * 1LL + number[i] * 1LL * rhs.number[j] + carry;
             } else {
-                cur = res.number[i + j] + carry;
+                cur = res.number[i + j] * 1LL + carry;
             }
-            res.number[i + j] = cur % BASE;
+            res.number[i + j] = (cur % BASE);
             carry = cur / BASE;
             j++;
         }

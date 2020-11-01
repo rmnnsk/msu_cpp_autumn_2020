@@ -8,14 +8,14 @@ class BigInt
 private:
     bool minus = false;
     int* number = nullptr;
-    int size = 0;
-    const int BASE = 10;
+    size_t size = 0;
+    const int BASE = 1000000000;
 public:
     BigInt() = default;
 
     explicit BigInt(const std::string& num);
 
-    BigInt(const int& num);
+    BigInt(int num);
 
     BigInt(const BigInt& rhs);
 
