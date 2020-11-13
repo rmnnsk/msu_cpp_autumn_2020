@@ -116,6 +116,17 @@ void test4()
     std::cout << "Check for CorruptedArchive." << std::endl;
     assert(err == Error::CorruptedArchive);
 
+    std::stringstream inp2;
+    std::cout << "Put (false false true -12345) in stream." << std::endl;
+    inp2 << "false false true -12345";
+    Deserializer deserializer2(inp2);
+
+    Data_TEST2 x2{false, false, false, 0};
+    std::cout << "Load from stream to x." << std::endl;
+    const Error err2 = deserializer2.load(x2);
+    std::cout << "Check for CorruptedArchive." << std::endl;
+    assert(err2 == Error::CorruptedArchive);
+
 }
 
 void test5()

@@ -88,18 +88,26 @@ public:
 
     Error process(uint64_t& token)
     {
-        uint64_t tmp;
-        if (in_ >> tmp) {
-            token = tmp;
-            return Error::NoError;
+        std::string tmp;
+        if (!(in_ >> tmp) || tmp[0] == '-') {
+            return Error::CorruptedArchive;
         }
-        return Error::CorruptedArchive;
+        std::stringstream casting_stream;
+        casting_stream << tmp;
+        uint64_t checker;
+        if (!(casting_stream >> checker)) {
+            return Error::CorruptedArchive;
+        }
+        token = checker;
+        return Error::NoError;
     }
 
     Error process(bool& token)
     {
         std::string token_text;
-        in_ >> token_text;
+        if (!(in_ >> token_text)) {
+            return Error::CorruptedArchive;
+        }
         if (token_text == "true") {
             token = true;
         } else if (token_text == "false") {
