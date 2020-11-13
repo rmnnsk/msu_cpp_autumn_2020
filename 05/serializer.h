@@ -53,6 +53,9 @@ public:
     Error process(T cur, ArgsT ...other)
     {
         Error cur_state = process(cur);
+        if (cur_state != Error::NoError) {
+            return cur_state;
+        }
         return process(other...);
     }
 
