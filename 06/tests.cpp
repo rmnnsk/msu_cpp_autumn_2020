@@ -22,7 +22,7 @@ void test2()
     try {
         auto text = format("{-1}+{1} = {0}", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -30,7 +30,7 @@ void test2()
     try {
         auto text = format("{first}+{1} = {0}", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -38,7 +38,7 @@ void test2()
     try {
         auto text = format("{}+{1} = {0}", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -46,7 +46,7 @@ void test2()
     try {
         auto text = format("{ + {1} = {0}", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -54,7 +54,7 @@ void test2()
     try {
         auto text = format("test}", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -62,7 +62,7 @@ void test2()
     try {
         auto text = format("{0} + {1} = {0", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -70,7 +70,7 @@ void test2()
     try {
         auto text = format("{0} + {0} = {1}{", 2, "one");
     }
-    catch (WrongFormat_Exception& err) {
+    catch (WrongFormat_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 }
@@ -84,7 +84,7 @@ void test3()
     try {
         auto text = format("{1}+{1} = {0}", 2, "one", "test");
     }
-    catch (LowArgs_Exception& err) {
+    catch (LowArgs_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -92,7 +92,7 @@ void test3()
     try {
         auto text = format("{1}+{1} = {0}", 2);
     }
-    catch (LowArgs_Exception& err) {
+    catch (LowArgs_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 
@@ -100,7 +100,7 @@ void test3()
     try {
         auto text = format("{0} + {1} = {12345678900}", 2, "one");
     }
-    catch (LowArgs_Exception& err) {
+    catch (LowArgs_Exception &err) {
         std::cout << "Catch WrongFormat_Exception" << std::endl;
     }
 }
@@ -121,18 +121,12 @@ void test4()
     std::cout << R"(format("{0}+{1} != {2}", 1234567, 7654321, "mandarinka"))" << std::endl;
     text = format("{0}+{1} != {2}", 1234567, 7654321, "mandarinka");
     assert(text == "1234567+7654321 != mandarinka");
-
-    std::cout << R"(format("{0}+{1} != {2}", 1234567, 7654321, "mandarinka"))" << std::endl;
-    text = format("{0}+{1} != {2}", 1234567, 7654321, "mandarinka");
-    assert(text == "1234567+7654321 != mandarinka");
-
-
 }
 
 int main()
 {
     std::vector<std::function<void()>> tests = {test1, test2, test3, test4};
-    for (const auto& test : tests) {
+    for (const auto &test : tests) {
         test();
         std::cout << std::endl;
     }
