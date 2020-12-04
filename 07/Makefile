@@ -9,7 +9,7 @@ build_test1: main.cpp
 build: build_test1
 
 test: 
-	./tests
+	valgrind ./tests
 
 clean:
 	rm  tests
