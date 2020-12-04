@@ -112,6 +112,7 @@ void test4() {
     assert(!vec.empty());
     std::cout << "Clearing vec" << std::endl;
     vec.clear();
+    std::cout << "Cleared" << std::endl;
     assert(vec.empty());
 }
 

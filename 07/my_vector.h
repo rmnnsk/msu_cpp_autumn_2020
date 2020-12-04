@@ -11,7 +11,7 @@ class MyAllocator
 public:
     MyAllocator() = default;
 
-    T* allocate(std::size_t n)
+    T *allocate(std::size_t n)
     {
         if (n > std::numeric_limits<std::size_t>::max() / sizeof(T)) {
             throw std::bad_alloc();
@@ -22,7 +22,7 @@ public:
         throw std::bad_alloc();
     }
 
-    void deallocate(T* ptr) noexcept
+    void deallocate(T *ptr) noexcept
     {
         delete[] ptr;
     }
@@ -48,7 +48,7 @@ public:
         capacity_ = n;
     }
 
-    MyVector(size_t n, const T& default_value) : size_(n), capacity_(n)
+    MyVector(size_t n, const T &default_value) : size_(n), capacity_(n)
     {
         data = allocator.allocate(n);
         for (std::size_t i = 0; i < size_; i++) {
@@ -61,9 +61,9 @@ public:
         if (new_cap <= capacity_) {
             return;
         }
-        T* new_ptr = allocator.allocate(new_cap);
+        T *new_ptr = allocator.allocate(new_cap);
         for (std::size_t i = 0; i < size_; i++) {
-            new_ptr[i] = data[i];
+            new_ptr[i] = std::move(data[i]);
             data[i].~T();
         }
         allocator.deallocate(data);
@@ -71,7 +71,7 @@ public:
         capacity_ = new_cap;
     }
 
-    void resize(std::size_t new_size, const T& val)
+    void resize(std::size_t new_size, const T &val)
     {
         if (new_size < 0) {
             throw std::invalid_argument("bad size");
@@ -111,22 +111,22 @@ public:
 
     }
 
-    size_t size() noexcept
+    size_t size() const noexcept
     {
         return size_;
     }
 
-    size_t capacity() noexcept
+    size_t capacity() const noexcept
     {
         return capacity_;
     }
 
-    bool empty() noexcept
+    bool empty() const noexcept
     {
         return (size_ == 0);
     }
 
-    T& operator[](const int i)
+    T &operator[](const int i)
     {
         if (i < 0 or i + 1 > size_) {
             throw std::out_of_range("Index out of range.");
@@ -134,7 +134,7 @@ public:
         return data[i];
     };
 
-    const T& operator[](const int i) const
+    const T &operator[](const int i) const
     {
         if (i < 0 or i + 1 > size_) {
             throw std::out_of_range("Index out of range.");
@@ -142,7 +142,7 @@ public:
         return data[i];
     }
 
-    void push_back(const T& value)
+    void push_back(const T &value)
     {
         if (size_ == capacity_) {
             reserve(2 * size_);
@@ -150,7 +150,7 @@ public:
         data[size_++] = value;
     }
 
-    void push_back(T&& value)
+    void push_back(T &&value)
     {
         if (size_ == capacity_) {
             reserve(2 * size_);
@@ -168,7 +168,7 @@ public:
     }
 
     template<typename ...Args>
-    void emplace_back(Args ...args)
+    void emplace_back(const Args &...args)
     {
         if (size_ == capacity_) {
             reserve(2 * size_);
@@ -184,34 +184,37 @@ public:
         size_ = 0;
     }
 
-    iterator begin()
+    iterator begin() const
     {
         return iterator(data);
     }
 
-    iterator end()
+    iterator end() const
     {
         return iterator(data + size_);
     }
 
-    reverse_iterator rbegin() {
+    reverse_iterator rbegin() const
+    {
         return reverse_iterator(this->end());
     }
-    reverse_iterator rend() {
+
+    reverse_iterator rend() const
+    {
         return reverse_iterator(this->begin());
     }
 
     ~MyVector()
     {
         clear();
-
+        allocator.deallocate(data);
     }
 
 private:
     static constexpr size_t START_SIZE = 5;
     size_t size_ = 0;
     size_t capacity_;
-    T* data;
+    T *data;
     Allocator allocator{};
 };
 
@@ -223,8 +226,8 @@ private:
 %+ empty
 %+ size
 %+ clear
-+ begin, rbegin
-+ end, rend
+%+ begin, rbegin
+%+ end, rend
 %+ resize
 %+ reserve
 %+ capacity
