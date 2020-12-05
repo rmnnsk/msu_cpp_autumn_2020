@@ -103,6 +103,7 @@ void test3()
     std::cout << "check size and vec[5] == {-100, 123}" << std::endl;
     assert(vec.size() == 6);
     assert(vec[5] == std::make_pair(-100, 123));
+
 }
 
 void test4() {

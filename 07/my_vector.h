@@ -173,7 +173,7 @@ public:
         if (size_ == capacity_) {
             reserve(2 * size_);
         }
-        data[size_++] = T(args...);
+        data[size_++] = T(std::forward<Args>(args)...);
     }
 
     void clear() noexcept
