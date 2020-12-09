@@ -1,5 +1,5 @@
 CC=g++
-EX_FLAGS=-std=c++17 -pedantic -pthread
+EX_FLAGS=-std=c++17 -pedantic -pthread -g -fsanitize=thread
 O_FLAGS=-std=c++17 -pedantic -c
 all: build
 
@@ -9,7 +9,7 @@ build_test1: main.cpp
 build: build_test1
 
 test: 
-	valgrind ./tests
+	./tests
 
 clean:
 	rm  tests

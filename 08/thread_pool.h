@@ -46,7 +46,10 @@ public:
 
     ~ThreadPool()
     {
-        terminate = true;
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            terminate = true;
+        }
         queue_ready.notify_all();
         for (auto &thr: pool) {
             thr.join();
